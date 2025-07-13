@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 	"time"
 
+	"x_bot/pkg/calc"
 	"x_bot/pkg/twitter"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -29,8 +32,21 @@ func Handler(ctx context.Context, event events.CloudWatchEvent) error {
 	jst := time.FixedZone("JST", 9*60*60)
 	jstNow := time.Now().In(jst)
 
+	// 日付をintで取得
+	todayInt, err := strconv.Atoi(jstNow.Format("20060102"))
+	if err != nil {
+		return fmt.Errorf("time format error: %w", err)
+	}
+
+	// 日付を素因数分解した結果を文字列で取得
+	strNumbers := []string{}
+	for _, num := range calc.PrimeFactorize(todayInt) {
+		strNumbers = append(strNumbers, strconv.Itoa(num))
+	}
+	primeFactorization := strings.Join(strNumbers, " * ")
+
 	// テストツイートを投稿
-	message := fmt.Sprintf("Hello from Golang ! Current time: %s", jstNow.Format("2006-01-02 15:04:05"))
+	message := fmt.Sprintf("%d = %s", todayInt, primeFactorization)
 
 	response, err := twitterClient.PostTweet(message)
 	if err != nil {
