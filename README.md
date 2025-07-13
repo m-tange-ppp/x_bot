@@ -1,19 +1,19 @@
-# 🤖 X Bot (Twitter Bot with AWS Lambda & Go)
+# X Bot (Twitter Bot with AWS Lambda & Go)
 
-AWS LambdaとTwitter API v2を使ったGoのXボットです！
+AWS LambdaとTwitter API v2を使ったGoのXボットです。
 
-## 🚀 特徴
+## 特徴
 
-- ⚡ AWS Lambdaで軽量・高速実行
-- 🐦 Twitter API v2対応
-- 🛡️ セキュアな認証情報管理
-- 📦 簡単デプロイ
-- 🧪 テスト対応
+- AWS Lambdaで軽量・高速実行
+- Twitter API v2対応
+- セキュアな認証情報管理
+- 簡単デプロイ
+- テスト対応
 
-## 📋 必要な準備
+## 必要な準備
 
 ### 1. Twitter Developer Account
-1. [Twitter Developer Platform](https://developer.twitter.com/) でアカウント作成
+1. Twitter Developer Platform でアカウント作成
 2. 新しいアプリを作成
 3. 以下の情報を取得：
    - Bearer Token
@@ -30,7 +30,7 @@ AWS LambdaとTwitter API v2を使ったGoのXボットです！
 - Make (ビルド用)
 - Git
 
-## ⚙️ セットアップ
+## セットアップ
 
 ### 1. リポジトリのクローン
 ```bash
@@ -55,7 +55,7 @@ cp .env.example .env
 make build-local
 ```
 
-## 🛠️ 使い方
+## 使い方
 
 ### ローカルでのテスト
 ```bash
@@ -76,7 +76,7 @@ make package
 make deploy
 ```
 
-## 📁 プロジェクト構造
+## プロジェクト構造
 
 ```
 x_bot/
@@ -90,13 +90,13 @@ x_bot/
 └── README.md             # このファイル
 ```
 
-## 🧪 テスト
+## テスト
 
 ```bash
 make test
 ```
 
-## 🔧 開発コマンド
+## 開発コマンド
 
 ```bash
 # 依存関係インストール
@@ -124,35 +124,31 @@ make lint
 make help
 ```
 
-## 🛡️ セキュリティ
+## セキュリティ
 
 - 認証情報は環境変数で管理
 - .envファイルはGitに含めない
 - AWS Lambda環境変数で本番運用
 
-## 📈 今後の拡張予定
+## 今後の拡張予定
 
-- [ ] 定期ツイート機能
-- [ ] メンション監視・自動返信
-- [ ] 画像付きツイート
-- [ ] DM機能
-- [ ] Analytics連携
+- 定期ツイート機能
+- メンション監視・自動返信
+- 画像付きツイート
+- DM機能
+- Analytics連携
 
-## 🤝 コントリビューション
+## コントリビューション
 
 1. このリポジトリをフォーク
 2. 新しいブランチを作成
 3. 変更をコミット
 4. プルリクエストを作成
 
-## 📝 ライセンス
+## ライセンス
 
-MIT License
+このプロジェクトのライセンスは未定です。
 
-## 💬 サポート
+## サポート
 
-何か問題があったらIssueを作成してください！
-
----
-
-🎉 Happy Botting! 🤖✨
+何か問題があったらIssueを作成してください。
