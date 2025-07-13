@@ -1,0 +1,25 @@
+# Build artifacts
+/bootstrap
+/main
+/*.zip
+
+# Environment variables
+.env*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# AWS
+.aws/
+
+# Artifact
+.exe
+response.json
