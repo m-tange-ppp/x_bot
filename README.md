@@ -15,8 +15,8 @@ AWS LambdaとTwitter API v2を使ったGoのXボットです。
 ### 1. Twitter Developer Account
 1. Twitter Developer Platform でアカウント作成
 2. 新しいアプリを作成
-3. 以下の情報を取得：
-   - Bearer Token
+3. アプリの権限を「Read and Write」に設定
+4. 以下の情報を取得：
    - API Key & Secret
    - Access Token & Secret
 
@@ -28,6 +28,8 @@ AWS LambdaとTwitter API v2を使ったGoのXボットです。
 ### 3. 開発環境
 - Go 1.21以上
 - Make (ビルド用)
+- AWS CLI (デプロイ用)
+- build-lambda-zip.exe (パッケージ作成用)
 - Git
 
 ## セットアップ
@@ -38,31 +40,17 @@ git clone <this-repository>
 cd x_bot
 ```
 
-### 2. 依存関係のインストール
+### 2. 環境変数の設定
 ```bash
-make deps
-```
-
-### 3. 環境変数の設定
-```bash
-# .env.exampleをコピーして設定
-cp .env.example .env
 # .envファイルを編集してTwitter認証情報を設定
 ```
 
-### 4. ローカルテスト用ビルド
+### 3. ローカルでのビルドテスト
 ```bash
-make build-local
+make build
 ```
 
 ## 使い方
-
-### ローカルでのテスト
-```bash
-# 環境変数を設定してから実行
-export TWITTER_BEARER_TOKEN="your_token_here"
-./main.exe
-```
 
 ### AWS Lambdaへのデプロイ
 ```bash
@@ -72,8 +60,14 @@ make build
 # 2. デプロイパッケージ作成
 make package
 
-# 3. AWS Lambdaにデプロイ（AWS CLI設定済みの場合）
+# 3. AWS Lambdaにデプロイ
 make deploy
+
+# 4. Lambda関数をテスト
+make test-lambda
+
+# 5. ログを確認
+make logs
 ```
 
 ## プロジェクト構造
@@ -82,8 +76,10 @@ make deploy
 x_bot/
 ├── main.go                 # Lambda関数のエントリーポイント
 ├── pkg/
-│   └── twitter/
-│       └── client.go       # Twitter API v2クライアント
+│   ├── twitter/
+│   │   ├── client.go       # Twitter API v2クライアント
+│   └── calc/
+│       └── prime_factorization.go  # 素因数分解機能
 ├── Makefile               # ビルド・デプロイスクリプト
 ├── .env.example           # 環境変数設定例
 ├── .gitignore            # Git除外設定
@@ -93,32 +89,33 @@ x_bot/
 ## テスト
 
 ```bash
-make test
+# Lambda関数をテスト
+make test-lambda
+
+# ログを確認
+make logs
 ```
 
 ## 開発コマンド
 
 ```bash
-# 依存関係インストール
-make deps
-
-# ローカル用ビルド
-make build-local
-
 # Lambda用ビルド
 make build
 
 # デプロイパッケージ作成
 make package
 
+# AWS Lambdaにデプロイ
+make deploy
+
+# Lambda関数をテスト
+make test-lambda
+
+# ログを確認
+make logs
+
 # クリーンアップ
 make clean
-
-# テスト実行
-make test
-
-# リント実行
-make lint
 
 # ヘルプ表示
 make help
@@ -130,14 +127,6 @@ make help
 - .envファイルはGitに含めない
 - AWS Lambda環境変数で本番運用
 
-## 今後の拡張予定
-
-- 定期ツイート機能
-- メンション監視・自動返信
-- 画像付きツイート
-- DM機能
-- Analytics連携
-
 ## コントリビューション
 
 1. このリポジトリをフォーク
@@ -148,7 +137,3 @@ make help
 ## ライセンス
 
 このプロジェクトのライセンスは未定です。
-
-## サポート
-
-何か問題があったらIssueを作成してください。
