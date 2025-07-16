@@ -3,11 +3,11 @@ package twitter
 import (
 	"bytes"
 	"crypto/hmac"
+	"crypto/rand"
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,7 +19,6 @@ import (
 
 // TwitterClient はTwitter API v2のクライアント
 type TwitterClient struct {
-	BearerToken  string
 	APIKey       string
 	APISecret    string
 	AccessToken  string
@@ -44,7 +43,6 @@ type TweetResponse struct {
 // NewTwitterClient は新しいTwitterクライアントを作成
 func NewTwitterClient() *TwitterClient {
 	return &TwitterClient{
-		BearerToken:  os.Getenv("TWITTER_BEARER_TOKEN"),
 		APIKey:       os.Getenv("TWITTER_API_KEY"),
 		APISecret:    os.Getenv("TWITTER_API_SECRET"),
 		AccessToken:  os.Getenv("TWITTER_ACCESS_TOKEN"),
@@ -56,8 +54,8 @@ func NewTwitterClient() *TwitterClient {
 
 // PostTweet はツイートを投稿する（OAuth 1.0a認証）
 func (c *TwitterClient) PostTweet(text string) (*TweetResponse, error) {
-	if c.APIKey == "" || c.APISecret == "" || c.AccessToken == "" || c.AccessSecret == "" {
-		return nil, fmt.Errorf("OAuth 1.0a credentials are required: API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET")
+	if err := c.ValidateCredentials(); err != nil {
+		return nil, err
 	}
 
 	url := fmt.Sprintf("%s/tweets", c.baseURL)
@@ -166,8 +164,10 @@ func (c *TwitterClient) generateSignature(method, requestURL string, params map[
 func (c *TwitterClient) generateNonce() string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	b := make([]byte, 32)
+	rand.Read(b)
+
 	for i := range b {
-		b[i] = charset[rand.Intn(len(charset))]
+		b[i] = charset[b[i]%byte(len(charset))]
 	}
 	return string(b)
 }
